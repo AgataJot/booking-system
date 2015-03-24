@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular Scheduling</title>
+
+    <!-- CSS -->
+    <!-- load Bootstrap and custom style.css -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.0/journal/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!-- JS -->
+    <!-- load Angular, Firebase, Firebase Angular Library, and custom app.js -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+    <script src="libs/ui-bootstrap-tpls-0.12.1.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="app-controller-asobj-table.js"></script>
+</head>
+<body>
+<div class="container" ng-app="scheduleApp" >
+  
+  <div class="page-header text-center">       
+    <h1>Schedule City</h1>        
+  </div>
+
+
+
+  <div class="times" ng-controller="tablesAsArrayController">
+    <div class="row">
+      <h2>Tables</h2>
+      <a href="" class="btn btn-primary" ng-click="addTable()">Add Table </a>
+    </div>
+    <div class="row">
+      <table class="table table-striped">
+        <thead>
+          <td>ID</td>
+          <td>Table Name <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': !sortByAsc.name}" ng-click="sortBy('name')"></a></td>
+          <td>Max People <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': !sortByAsc.maxPeople}" ng-click="sortBy('maxPeople')"></a></td>
+          <td>Enable <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': sortByAsc.enabled}" ng-click="sortBy('enabled')"></a></td>
+          <td>Edit</td>
+        </thead>
+        <tr ng-repeat="table in tables | orderBy: sortByRule">
+          <td>{{$index}}: {{table.$id}}</td>
+          <td><input type="text" class="form-control" ng-model="table.name" ng-model-options="{ updateOn: 'blur' }" min="0" step="1"></td>
+          <td><input type="number" class="form-control" ng-model="table.maxPeople" ng-model-options="{ updateOn: 'blur' }" min="0" step="1"></td>
+          <td><input type="checkbox" class="checkbox" id="table-{{ $index }}" ng-model="table.enabled"></td>
+          <td>
+            <a href="" class="btn btn-danger" ng-click="removeTable(table.$id)">Remove</a>
+            <a href="" class="btn btn-info" ng-click="saveTable(table.$id)">Save</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+</div>  
+</body>
+</html>
