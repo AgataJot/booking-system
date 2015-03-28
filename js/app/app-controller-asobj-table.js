@@ -1,8 +1,8 @@
 // create our main controller and get access to firebase
 scheduleAppControllers.controller('tablesAsArrayController', ["$scope", "$firebaseArray", function($scope, $firebaseArray) {
-  
-  // connect to firebase 
-  // var ref = new Firebase("https://boiling-heat-3704.firebaseio.com/tables");  
+  console.log("tables as arrey cntrl loaded");
+  // connect to firebase
+  // var ref = new Firebase("https://boiling-heat-3704.firebaseio.com/tables");
   // three way data binding
   // syncObject.$bindTo($scope, 'tables');
   $scope.tables = $firebaseArray(new Firebase("https://boiling-heat-3704.firebaseio.com/tables"));
@@ -24,7 +24,7 @@ scheduleAppControllers.controller('tablesAsArrayController', ["$scope", "$fireba
     });
 
   //
-  $scope.addTable = function() {    
+  $scope.addTable = function() {
     $scope.tables.$add({
       name: 'Table Name',
       maxPeople: 0,
@@ -50,7 +50,7 @@ scheduleAppControllers.controller('tablesAsArrayController', ["$scope", "$fireba
     return true;
   };
 
-  // 
+  //
   $scope.sortBy = function(sortByKey) {
 
     $scope.sortByKey = sortByKey;
@@ -64,5 +64,5 @@ scheduleAppControllers.controller('tablesAsArrayController', ["$scope", "$fireba
   $scope.tables.$watch(function(e){
     console.log(e);
   });
-  
+
 }]);

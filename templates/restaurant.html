@@ -1,0 +1,32 @@
+<div class="times">
+  <div class="row">
+    <h2>Tables</h2>
+    <a href="" class="btn btn-primary" ng-click="addTable()">Add Table </a>
+  </div>
+  <div class="row">
+
+    <!-- Tables -->
+    <table class="table table-striped">
+      <thead>
+        <td>ID</td>
+        <td>Table Name <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': !sortByAsc.name}" ng-click="sortBy('name')"></a></td>
+        <td>Max People <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': !sortByAsc.maxPeople}" ng-click="sortBy('maxPeople')"></a></td>
+        <td>Enable <a href="" class="glyphicon glyphicon-sort-by-attributes" ng-class="{'glyphicon-sort-by-attributes-alt': sortByAsc.enabled}" ng-click="sortBy('enabled')"></a></td>
+        <td>Edit</td>
+      </thead>
+
+      <!-- Table -->
+      <tr ng-repeat="table in tables | orderBy: sortByRule">
+        <td>{{$index}}: {{table.$id}}</td>
+        <td><input type="text" class="form-control" ng-model="table.name" ng-model-options="{ updateOn: 'blur' }" min="0" step="1"></td>
+        <td><input type="number" class="form-control" ng-model="table.maxPeople" ng-model-options="{ updateOn: 'blur' }" min="0" step="1"></td>
+        <td><input type="checkbox" class="checkbox" id="table-{{ $index }}" ng-model="table.enabled"></td>
+        <td>
+          <a href="" class="btn btn-danger" ng-click="removeTable(table.$id)">Remove</a>
+          <a href="" class="btn btn-info" ng-click="saveTable(table.$id)">Save</a>
+        </td>
+      </tr><!-- end: Table -->
+
+    </table><!-- end: Tables -->
+  </div>
+</div>

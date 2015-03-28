@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <base href="/">
     <meta charset="UTF-8">
     <title>Angular Scheduling</title>
 
@@ -12,33 +13,19 @@
     <!-- JS -->
     <!-- load Angular, Firebase, Firebase Angular Library, and custom app.js -->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular-route.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.2.2/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
-    <script src="libs/ui-bootstrap-tpls-0.12.1.min.js"></script>
-    
-    <script src="app.js"></script>
-    <script src="days.js"></script>
+    <script src="./js/libs/ui-bootstrap-tpls-0.12.1.min.js"></script>
+    <script src="./js/app/app.js"></script>
+    <script src="./js/app/app-controller-asobj-table.js"></script>
+    <script src="./js/app/days.js"></script>
 </head>
 <body ng-app="scheduleApp">
-
-  <div class="container" ng-controller="mainController">
-    <h4>Inline</h4>
-    <div style="display:inline-block; min-height:290px;">
-        <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
-    </div>
-
-    
-    <div class="row">
-      <div class="col-md-6">
-        <p class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-          <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-          </span>
-            </p>
-      </div>
-    </div>
+  <a href="./#/tables/configure" class="btn btn-primary">Configure tables</a>
+  <a href="./#/days" class="btn btn-primary">Days</a>
+  <div class="container" ng-controller="IndexController">
   </div>
-
+  <div class="container" ng-view></div>
 </body>
 </html>

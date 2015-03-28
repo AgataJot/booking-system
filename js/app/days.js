@@ -1,7 +1,7 @@
 // create our main controller and get access to firebase
 scheduleAppControllers.controller('mainController', ["$scope", "$firebaseObject", function($scope, $firebaseObject) {
-  
-  // connect to firebase 
+
+  // connect to firebase
   var ref = new Firebase("https://boiling-heat-3704.firebaseio.com/days") 
   // var fb = $firebase(ref);
   var obj = $firebaseObject(ref);
