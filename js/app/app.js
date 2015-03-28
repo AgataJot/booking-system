@@ -1,11 +1,9 @@
 // create our angular module and inject firebase
 var scheduleAppControllers = angular.module('scheduleApp', ['ngRoute', 'firebase', 'ui.bootstrap'])
   .controller('IndexController', function($scope, $route, $routeParams, $location) {
-     console.log("$scope, $route, $routeParams, $location");
   })
 
 	.config(function($routeProvider, $locationProvider) {
-    console.log("hey", $routeProvider, $locationProvider);
 	  $routeProvider
 	   .when('/Book/:bookId', {
   	    templateUrl: 'book.html',
@@ -22,6 +20,10 @@ var scheduleAppControllers = angular.module('scheduleApp', ['ngRoute', 'firebase
       .when('/tables/configure', {
         templateUrl: 'templates/restaurant.html',
         controller: 'tablesAsArrayController',
+      })
+      .when('/overview/:date', {
+        templateUrl: 'templates/overview.html',
+        controller: 'OverviewController',
       })
       .when('/days', {
         templateUrl: 'templates/datepicker.html',

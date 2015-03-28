@@ -20,11 +20,13 @@
     <script src="./js/app/app.js"></script>
     <script src="./js/app/app-controller-asobj-table.js"></script>
     <script src="./js/app/days.js"></script>
+    <script src="./js/app/overview.js"></script>
 </head>
 <body ng-app="scheduleApp">
-  <a href="./#/tables/configure" class="btn btn-primary">Configure tables</a>
-  <a href="./#/days" class="btn btn-primary">Days</a>
   <div class="container" ng-controller="IndexController">
+    <a href="./#/tables/configure" class="btn btn-primary">Configure tables</a>
+    <a href="./#/days" class="btn btn-primary">Days</a>
+    <a href="./#/overview" class="btn btn-primary">Overview</a>
   </div>
   <div class="container" ng-view></div>
 </body>
