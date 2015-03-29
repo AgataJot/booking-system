@@ -1,5 +1,6 @@
 // create our main controller and get access to firebase
-scheduleAppControllers.controller('OverviewController', ['$scope', '$location', '$firebaseArray', '$firebaseObject', '$routeParams', '$filter', function($scope, $location, $firebaseArray, $firebaseObject, $routeParams, $filter) {
+scheduleAppControllers.controller('OverviewController', ['$scope', '$location', '$firebaseArray', '$firebaseObject', '$routeParams', 'dateFilter',
+  function($scope, $location, $firebaseArray, $firebaseObject, $routeParams, dateFilter) {
 
   // three way data binding
   // syncObject.$bindTo($scope, 'tables');
@@ -33,7 +34,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
   // format date for firebase 2015/04/23
   $scope.dt = new Date($routeParams.y, $routeParams.m-1, $routeParams.d);
-  $scope.firebaseFormattedDate = $filter('date')($scope.dt, 'yyyy/MM/dd')
+  $scope.firebaseFormattedDate = dateFilter($scope.dt, 'yyyy/MM/dd')
 
   $scope.$watch('firebaseFormattedDate', function(newValue, oldValue){
     if (newValue.valueOf() !== oldValue.valueOf()) {
@@ -80,7 +81,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
       datetime.setMinutes(m)
       hours.push({
         datetime: datetime,
-        string: $filter('date')(datetime, 'HH:mm')
+        string: dateFilter(datetime, 'HH:mm')
       })
     }
   }
