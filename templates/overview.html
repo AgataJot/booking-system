@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" style="position: relative;">
 
     <table class="table" ng-click="onTableClicked($event)">
       <thead>
@@ -34,13 +34,15 @@
         <td ng-repeat="table in tables">{{table.name}} ({{table.maxPeople}})</td>
       </thead>
       <tbody>
-        <tr ng-repeat="hour in hours" class="{{hour.string}}">
+        <tr ng-repeat="hour in hours" ng-class="{{['h-' + hour.datetime.valueOf()]}}">
           <td>{{hour.string}}</td>
-          <td class="tid-{{table.$id}}" ng-class="{danger: day[hour.string][table.$id]}" data-tableid="{{table.$id}}" data-timestring="{{hour.string}}" data-datetime="{{hour.datetime.valueOf()}}" ng-repeat="table in tables">+</td>
+          <td class="tid-{{table.$id}}" ng-class="{danger: day2[hour.string][table.$id]}" data-tableid="{{table.$id}}" data-timestring="{{hour.string}}" data-datetime="{{hour.datetime.valueOf()}}" ng-repeat="table in tables">+</td>
         </tr>
       </tbody>
-
     </table>
+
+    <div style="position: absolute; top: 0;left: 0;background: red;height: 100px;width: 100px;position: absolute;" id="foo">
+    </div>
 
   </div>
 </div>
