@@ -31,68 +31,22 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
   // });
 
 
-
-  // ****************************
-  // ******* DATE PICKER ********
-  // ****************************
-
-  
-
-
-
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  // $scope.today();
-
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
-
-  // Disable weekend selection
-  $scope.disabled = function(date, mode) {
-    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  };
-
-  $scope.toggleMin = function() {
-    $scope.minDate = $scope.minDate ? null : new Date();
-  };
-  $scope.toggleMin();
-
-  $scope.open = function($event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-
-    $scope.opened = true;
-  };
-
-  $scope.dateOptions = {
-    formatYear: 'yy',
-    startingDay: 1
-  };
-
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-  $scope.format = $scope.formats[0];
-
-
-  $scope.$watch('dt', function(newValue, oldValue){
-    // console.log("newValue, oldValue)", newValue, oldValue);
-    if (newValue.valueOf() !== oldValue.valueOf()) {
-      var d = newValue.getUTCFullYear()
-          d += '/'+ (newValue.getUTCMonth()+1)
-          d += '/' + newValue.getUTCDate()
-      // console.log("d", d);
-      $location.path('/overview/' + d ).replace()
-    }
-  }, true);
-
-  // ********************
-
   // format date for firebase 2015/04/23
   $scope.dt = new Date($routeParams.y, $routeParams.m-1, $routeParams.d);
-  var firebaseFormattedDate = $filter('date')($scope.dt, 'yyyy/MM/dd')
+  $scope.firebaseFormattedDate = $filter('date')($scope.dt, 'yyyy/MM/dd')
 
-  var fbDay= new Firebase(root + "days/" + firebaseFormattedDate)
+  $scope.$watch('firebaseFormattedDate', function(newValue, oldValue){
+    if (newValue.valueOf() !== oldValue.valueOf()) {
+      $location.path('/overview/' + newValue ).replace()
+    }
+  });
+  $scope.$on('DAYPICKER:DATE:CHANGE', function(e, v) {
+    $scope.firebaseFormattedDate = v;
+  });
+
+
+
+  var fbDay= new Firebase(root + "days/" + $scope.firebaseFormattedDate)
   $scope.day = $firebaseObject(fbDay);
 
   //observe loading day bookings data
@@ -153,19 +107,19 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     addBooking({
       tableId: tableId,
       time: time,
-      date: firebaseFormattedDate,
+      date: $scope.firebaseFormattedDate,
       endDateTime: datetime.valueOf()
     })
   }
 
-  // var fbBookingsOnTheDay= new Firebase(root + "days/" + firebaseFormattedDate)
+  // var fbBookingsOnTheDay= new Firebase(root + "days/" + $scope.firebaseFormattedDate)
   // $scope.fbBookingsOnTheDay = $firebaseArray(fbBookingsOnTheDay);
   // // console.log("$scope.fbBookingsOnTheDay", $scope.fbBookingsOnTheDay);
 
   // load detailed bookings
   $scope.bookingsArr = []
   var refDetailedBookingsInfo = new Firebase(root+"/bookings");
-  refDetailedBookingsInfo.orderByChild("date").equalTo(firebaseFormattedDate).on("value", function(snapshot) {
+  refDetailedBookingsInfo.orderByChild("date").equalTo($scope.firebaseFormattedDate).on("value", function(snapshot) {
     // // console.log(snapshot.val());
     $scope.detailedBookingsArr = snapshot.val()
   });
@@ -200,7 +154,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
         // add the rest of the booking
 
-        // var timeRef = "/days/" + firebaseFormattedDate + "/" +newBooking.time+ "/"
+        // var timeRef = "/days/" + $scope.firebaseFormattedDate + "/" +newBooking.time+ "/"
 
         // root.child( timeRef ).set(
         //   {
