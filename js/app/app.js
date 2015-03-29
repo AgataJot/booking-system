@@ -21,7 +21,7 @@ var scheduleAppControllers = angular.module('scheduleApp', ['ngRoute', 'firebase
         templateUrl: 'templates/restaurant.html',
         controller: 'tablesAsArrayController',
       })
-      .when('/overview/:date', {
+      .when('/overview/:y/:m/:d', {
         templateUrl: 'templates/overview.html',
         controller: 'OverviewController',
       })

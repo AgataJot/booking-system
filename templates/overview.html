@@ -1,6 +1,6 @@
 <div class="container">
   <h2>Overview</h2>
-  <h4>{{date}}</h4>
+  <h4>{{dt | date:'medium' }}</h4>
   <div class="row">
     <div class="col-md-6">
       <p class="input-group">
@@ -24,5 +24,23 @@
 
       </p>
     </div>
+  </div>
+
+  <div class="row">
+
+    <table class="table" ng-click="onTableClicked($event)">
+      <thead>
+        <td>Time</td>
+        <td ng-repeat="table in tables">{{table.name}} ({{table.maxPeople}})</td>
+      </thead>
+      <tbody>
+        <tr ng-repeat="hour in hours" class="{{hour.string}}">
+          <td>{{hour.string}}</td>
+          <td class="tid-{{table.$id}}" ng-class="{danger: day[hour.string][table.$id]}" data-tableid="{{table.$id}}" data-timestring="{{hour.string}}" data-datetime="{{hour.datetime.valueOf()}}" ng-repeat="table in tables">+</td>
+        </tr>
+      </tbody>
+
+    </table>
+
   </div>
 </div>
