@@ -2,48 +2,24 @@
 scheduleAppControllers.controller('OverviewController', ['$scope', '$location', '$firebaseArray', '$firebaseObject', '$routeParams', 'dateFilter',
   function($scope, $location, $firebaseArray, $firebaseObject, $routeParams, dateFilter) {
 
-  // three way data binding
-  // syncObject.$bindTo($scope, 'tables');
-
   var tables = [];
   var root = new Firebase("https://boiling-heat-3704.firebaseio.com/");
   var fbTables= new Firebase(root + "tables/")
   $scope.tables = $firebaseArray(fbTables);
-  fbTables.on("value", function(snapshot) {
-    tables = snapshot.val();
-  }, function (errorObject) {
-    // // console.log("The read failed: " + errorObject.code);
-  });
-
-  // $scope.days = $firebaseArray(new Firebase(root + "tables"));
-
-  // $scope.tables.$loaded()
-  //   .then(function(data){
-      // // console.log(data);
-
-  //   })
-  //   .catch(function(err){
-
-  //   });
-
-
-  // $scope.tables.$watch(function(e){
-    // console.log(e);
-  // });
-
 
   // format date for firebase 2015/04/23
   $scope.dt = new Date($routeParams.y, $routeParams.m-1, $routeParams.d);
   $scope.firebaseFormattedDate = dateFilter($scope.dt, 'yyyy/MM/dd')
 
-  $scope.$watch('firebaseFormattedDate', function(newValue, oldValue){
+  $scope.$watch('dt', function(newValue, oldValue){
     if (newValue.valueOf() !== oldValue.valueOf()) {
-      $location.path('/overview/' + newValue ).replace()
+      // var d = dateFilter(newValue, 'yyyy/MM/dd')
+      $scope.firebaseFormattedDate = dateFilter(newValue, 'yyyy/MM/dd')
+      $location.path('/overview/' + $scope.firebaseFormattedDate ).replace()
     }
-  });
-  $scope.$on('DAYPICKER:DATE:CHANGE', function(e, v) {
-    $scope.firebaseFormattedDate = v;
-  });
+  }, true);
+
+  $scope.naomi = true;
 
 
 
@@ -99,12 +75,12 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     var tableId = tdData.attr('data-tableid')
     var time = tdData.attr('data-timestring')
     var datetime = new Date(parseInt(tdData.attr('data-datetime'), 10))
-    datetime.setUTCHours(datetime.getUTCHours() + 2)
+    datetime.setHours(datetime.getHours() + 2)
     // // console.log("tableId", tableId);
     // // console.log("time", time);
 
     var endDateTime = new Date($scope.dt)
-    // endDateTime.setUTCHour()
+    // endDateTime.setHour()
     addBooking({
       tableId: tableId,
       time: time,
