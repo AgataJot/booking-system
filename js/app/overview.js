@@ -16,6 +16,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     $scope.hours = null;
     $scope.bookingsArr = null;
     $scope.detailedBookingsArr = null;
+    $scope.day2 = {};
 
 
     (function init() {
@@ -74,7 +75,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
             foundFirst = true
           }
 
-          if (foundFirst && endTime >= hourobj.datetime) {
+          if (foundFirst && endTime >= hourobj.datetime.valueOf()) {
             $scope.day2[hourobj.string] =  $scope.day2[hourobj.string] || {}
             $scope.day2[hourobj.string][tableId] = addedObject[tableId]
           }
@@ -211,7 +212,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
       // // console.log("$scope.bookingsArr", $scope.bookingsArr);
     }
   });
-  $scope.day2 = {}
+
   window.day2 = $scope.day2
   window.calculatefooheight = function() {
     var t = '09:45'
