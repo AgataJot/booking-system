@@ -44,7 +44,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
             datetime.setMinutes(m)
             hours.push({
               datetime: datetime,
-              string: dateFilter(datetime, 'hh:mm')
+              string: dateFilter(datetime, 'H:mm')
             })
           }
         }
@@ -61,32 +61,26 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     (function watchfFirebaseEvents() {
       fbday.on("child_added", function(snapshot) {
 
-        // console.log("snapshot", snapshot.val());
-        var key = snapshot.key()
+        var tableId = snapshot.key()
         var addedObject = snapshot.val()
-        var firstHour = key
+        var firstHour = Object.keys(addedObject)[0]
+        var endTime = addedObject[firstHour].endDateTime
         var foundFirst = false
-        var tableId = Object.keys(addedObject)[0]
-        var endTime = addedObject[tableId].endDateTime
 
-        // $scope.day2[firstHour].push(addedObject)
         $scope.hours.forEach(function(hourobj, i) {
           if (hourobj.string===firstHour) {
             foundFirst = true
           }
 
           if (foundFirst && endTime >= hourobj.datetime.valueOf()) {
-            $scope.day2[hourobj.string] =  $scope.day2[hourobj.string] || {}
-            $scope.day2[hourobj.string][tableId] = addedObject[tableId]
+            $scope.day2[tableId] =  $scope.day2[tableId] || {}
+            $scope.day2[tableId][hourobj.string] = addedObject[firstHour]
           }
 
           return
         })
-        // console.warn($scope.day2);
-
-        // $scope.day2
       }, function (errorobject) {
-        // // console.log("the read failed: " + errorobject.code);
+        // console.log("the read failed: " + errorobject.code);
       });
 
     })();
@@ -104,25 +98,19 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
     (function bindEvents() {
 
-      $scope.onTableClicked = function addnewBooking($event) {
-        // // console.log("e", $event);
-        // // console.log("$event", $event.target);
-        // // console.log("data", angular.element($event.target).data());
-        var tddata = angular.element($event.target)
-        var tableId = tddata.attr('data-tableid')
-        var time = tddata.attr('data-timestring')
-        var datetime = new Date(parseInt(tddata.attr('data-datetime'), 10))
-        datetime.setHours(datetime.getHours() + 2)
-        // // console.log("tableId", tableId);
-        // // console.log("time", time);
+      $scope.onTDClicked = function addnewBooking($event, i, tableId, datetime) {
+        var endDateTime = new Date(datetime)
+        endDateTime.setHours(endDateTime.getHours() + 2)
+        var time = dateFilter(new Date(datetime), 'H:mm')
 
-        var endDateTime = new Date($scope.dt)
-        // endDateTime.sethour()
+        // var endDateTime = new Date($scope.dt)
+
         addBooking({
           tableId: tableId,
           time: time,
           date: firebaseFormattedDate,
-          endDateTime: datetime.valueOf()
+          endDateTime: endDateTime.valueOf(),
+          startTimeSlotIndex: i
         })
       }
 
@@ -147,11 +135,15 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
   // $scope.fbbookingsontheday = $firebaseArray(fbbookingsontheday);
   // // console.log("$scope.fbbookingsontheday", $scope.fbbookingsontheday);
 
-  // load detailed bookings
 
+
+  // {
+  //   tableId: tableId,
+  //   time: time,
+  //   date: firebaseFormattedDate,
+  //   endDateTime: datetime.valueOf()
+  // }
   function addBooking(newBooking) {
-    // console.log("newBooking", newBooking);
-    // // console.log("newBooking", newBooking);
 
 
 
@@ -168,11 +160,17 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
       if (!err) {
         var bookingId = id.key();
         var t = newBooking.tableId
-        $scope.day[newBooking.time] = $scope.day[newBooking.time] || {}
-        $scope.day[newBooking.time][t] = {
+        $scope.day[newBooking.tableId] = $scope.day[newBooking.tableId] || {}
+        $scope.day[newBooking.tableId][newBooking.time] = {
             bookingId: bookingId,
-            endDateTime: newBooking.endDateTime
+            endDateTime: newBooking.endDateTime,
+            startTimeSlotIndex: newBooking.startTimeSlotIndex
         }
+        // $scope.day[newBooking.time] = $scope.day[newBooking.time] || {}
+        // $scope.day[newBooking.time][t] = {
+        //     bookingId: bookingId,
+        //     endDateTime: newBooking.endDateTime
+        // }
         $scope.day.$save()
 
 

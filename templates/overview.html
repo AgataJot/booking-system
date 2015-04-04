@@ -5,22 +5,54 @@
   </div>
 
   <div class="row" style="position: relative;">
+  <button ce-box-creator="25,25">Click me</button>
+    <div class="table-bg">
+      <div class="table-bg__line"></div>
+      <div class="table-bg__line"
+       ng-repeat="(ind, hour) in hours"
+       >
+        {{hour.string}}
+      </div>
+    </div>
 
-    <table class="table" ng-click="onTableClicked($event)">
+
+    <table class="table-timeslots">
       <thead>
         <td>Time</td>
         <td ng-repeat="table in tables">{{table.name}} ({{table.maxPeople}})</td>
       </thead>
       <tbody>
-        <tr ng-repeat="hour in hours" ng-class="{{['h-' + hour.datetime.valueOf()]}}">
-          <td>{{hour.string}}</td>
-          <td class="tid-{{table.$id}}" ng-class="{danger: day2[hour.string][table.$id]}" data-tableid="{{table.$id}}" data-timestring="{{hour.string}}" data-datetime="{{hour.datetime.valueOf()}}" ng-repeat="table in tables">+</td>
+        <tr class="bookings-container">
+          <td></td>
+          <td ng-repeat="table in tables">
+            <div style="position-abs"
+             ng-repeat="(key, value) in day[table.$id]"
+             ng-class="{{['h-' + value.startTimeSlotIndex, 'position-abs']}}"
+             >
+              {{table.$id}}} -- {{key}}
+            </div>
+          </td>
         </tr>
+
+        <!-- <tr
+          ng-repeat="(ind, hour) in hours"
+          ng-class="{{['h-' + hour.datetime.valueOf()]}}">
+
+          <td>{{hour.string}}</td>
+          <td
+            class="tid-{{table.$id}}"
+            ng-class="{danger: day2[table.$id][hour.string]}"
+            data-tableid="{{table.$id}}"
+            data-timestring="{{hour.string}}"
+            data-datetime="{{hour.datetime.valueOf()}}"
+            ng-repeat="table in tables"
+            ng-click="onTDClicked($event, ind, table.$id, hour.datetime)">
+              {{ind}}
+          </td>
+
+        </tr> -->
       </tbody>
     </table>
-
-    <div style="position: absolute; top: 0;left: 0;background: red;height: 100px;width: 100px;position: absolute;" id="foo">
-    </div>
 
   </div>
 </div>
