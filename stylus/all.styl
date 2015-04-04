@@ -40,17 +40,33 @@ for row in (1..15)
   margin-top 37px
   width 100%
   thead td
-    height 38px
+    height 37px
 
 .bookings-container
+  .fullheight
+    height 2000px
+    position absolute
+    z-index 1
   td
     position relative
     // height 30000px
+
+.bookings-container__bg
+    height 2000px
+    position absolute
+    z-index 1
+    width 100%
+    top 0
+
+.bookings-container__bg__timeslot
+  height 38px
+  background-color rgba(255, 255, 255, 0.2)
 
 .bookings-container__booking
   position absolute
   width 95%
   background-color rgba(0, 255, 255, 0.2)
+  z-index 2
 
 
 //==============================================================================

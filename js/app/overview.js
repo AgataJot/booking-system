@@ -98,12 +98,10 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
     (function bindEvents() {
 
-      $scope.onTDClicked = function addnewBooking($event, i, tableId, datetime) {
+      $scope.onTDClicked = function ($event, i, tableId, datetime) {
         var endDateTime = new Date(datetime)
         endDateTime.setHours(endDateTime.getHours() + 2)
         var time = dateFilter(new Date(datetime), 'H:mm')
-
-        // var endDateTime = new Date($scope.dt)
 
         addBooking({
           tableId: tableId,

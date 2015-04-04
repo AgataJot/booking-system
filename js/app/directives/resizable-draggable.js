@@ -21,7 +21,7 @@ function placeNode(node, top, left) {
 // });
 
 // To manage the drag
-scheduleAppControllers.directive("ceDrag", function($document) {
+scheduleAppControllers.directive("ceDrag", ['$document', '$timeout', function($document, $timeout) {
   return function($scope, $element, $attr) {
     var startX = 0,
         startY = 0;
@@ -30,7 +30,8 @@ scheduleAppControllers.directive("ceDrag", function($document) {
 
     $element.append(newElement);
     newElement.on("mousedown", function($event) {
-      event.preventDefault();
+      $event.preventDefault();
+      $event.stopPropagation();
 
       // To keep the last selected box in front
       angular
@@ -49,11 +50,23 @@ scheduleAppControllers.directive("ceDrag", function($document) {
     }
 
     function mouseup() {
+      $timeout(function(){
+
+        var multiplies = 37
+        var originalT = $element.prop('offsetTop')
+        var slots = originalT / multiplies
+        var destT = Math.round(slots) * multiplies
+
+        $element.css({
+          top: destT + "px"
+        });
+
+      }, 100);
       $document.off("mousemove", mousemove);
       $document.off("mouseup", mouseup);
     }
   };
-});
+}]);
 
 // To manage the resizers
 scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function($document, $timeout) {
@@ -102,7 +115,8 @@ scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function(
         $mouseDown.height = $element[0].offsetHeight;
 
         function mousemove($event) {
-          event.preventDefault();
+          $event.preventDefault();
+          $event.stopPropagation();
           for( var i = 0 ; i < handlers.length ; i++){
             handlers[i]( $event );
           }
