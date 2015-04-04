@@ -5,7 +5,7 @@
 
 /* line 14 : /Users/agata/Documents/work/playground/booking-system2/node_modules/gulp-stylus/node_modules/stylus/lib/functions/index.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/index.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/index.styl */
 
 /* line 10 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/index.styl */
 
@@ -25,7 +25,7 @@
 
 /* line 90 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/flex.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/gradients.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/gradients.styl */
 
 /* line 11 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/gradients.styl */
 
@@ -41,7 +41,7 @@
 
 /* line 19 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/image.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/normalize/index.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/normalize/index.styl */
 
 /* line 8 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/normalize/index.styl */
 
@@ -89,7 +89,7 @@
 
 /* line 5 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/reset.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/text/index.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/text/index.styl */
 
 /* line 12 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/text/index.styl */
 
@@ -123,9 +123,9 @@
 
 /* line 1 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/size.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/size.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/node_modules/nib/lib/nib/size.styl */
 
-/* line 124 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 139 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 
 /* line 1 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 td {
@@ -254,14 +254,29 @@ td {
 /* line 39 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .table-timeslots {
   margin-top: 37px;
+  width: 100%;
 }
 
-/* line 41 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 42 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .table-timeslots thead td {
   height: 38px;
 }
 
-/* line 48 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 45 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+
+/* line 46 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+.bookings-container td {
+  position: relative;
+}
+
+/* line 50 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+.bookings-container__booking {
+  position: absolute;
+  width: 95%;
+  background-color: rgba(0,255,255,0.2);
+}
+
+/* line 59 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .contentEditorBox {
   border: 1px solid #000;
   background-color: #fff;
@@ -269,7 +284,7 @@ td {
   height: 50px;
 }
 
-/* line 54 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 65 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .draggable {
   position: absolute;
   top: 2px;
@@ -279,9 +294,21 @@ td {
   cursor: pointer;
 }
 
-/* line 62 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
-.n-resize {
+/* line 73 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+.n-resize,
+.e-resize,
+.s-resize,
+.w-resize,
+.nw-resize,
+.ne-resize,
+.se-resize,
+.sw-resize {
+  background-color: rgba(0,255,255,0.7);
   position: absolute;
+}
+
+/* line 77 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+.n-resize {
   top: -3px;
   left: 0px;
   width: 100%;
@@ -289,9 +316,8 @@ td {
   cursor: n-resize;
 }
 
-/* line 70 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 85 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .e-resize {
-  position: absolute;
   top: 0px;
   left: calc(100% - 2px);
   width: 5px;
@@ -299,9 +325,8 @@ td {
   cursor: w-resize;
 }
 
-/* line 78 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 93 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .s-resize {
-  position: absolute;
   top: calc(100% - 2px);
   left: 0px;
   width: 100%;
@@ -309,9 +334,8 @@ td {
   cursor: s-resize;
 }
 
-/* line 86 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 101 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .w-resize {
-  position: absolute;
   top: 0px;
   left: -3px;
   width: 5px;
@@ -319,9 +343,8 @@ td {
   cursor: e-resize;
 }
 
-/* line 94 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 109 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .nw-resize {
-  position: absolute;
   top: -3px;
   left: -3px;
   width: 7px;
@@ -329,9 +352,8 @@ td {
   cursor: nw-resize;
 }
 
-/* line 102 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 117 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .ne-resize {
-  position: absolute;
   top: -3px;
   left: calc(100% - 4px);
   width: 7px;
@@ -339,9 +361,8 @@ td {
   cursor: ne-resize;
 }
 
-/* line 110 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 125 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .se-resize {
-  position: absolute;
   top: calc(100% - 4px);
   left: calc(100% - 4px);
   width: 7px;
@@ -349,9 +370,8 @@ td {
   cursor: se-resize;
 }
 
-/* line 118 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
+/* line 133 : /Users/agata/Documents/work/playground/booking-system2/stylus/all.styl */
 .sw-resize {
-  position: absolute;
   top: calc(100% - 4px);
   left: -3px;
   width: 7px;

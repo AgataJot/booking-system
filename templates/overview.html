@@ -5,7 +5,6 @@
   </div>
 
   <div class="row" style="position: relative;">
-  <button ce-box-creator="25,25">Click me</button>
     <div class="table-bg">
       <div class="table-bg__line"></div>
       <div class="table-bg__line"
@@ -25,9 +24,10 @@
         <tr class="bookings-container">
           <td></td>
           <td ng-repeat="table in tables">
-            <div style="position-abs"
+            <div 
              ng-repeat="(key, value) in day[table.$id]"
-             ng-class="{{['h-' + value.startTimeSlotIndex, 'position-abs']}}"
+             ng-class="{{['h-' + value.startTimeSlotIndex, 'bookings-container__booking']}}"
+             ce-drag ce-resize
              >
               {{table.$id}}} -- {{key}}
             </div>

@@ -38,8 +38,19 @@ for row in (1..15)
 //==============================================================================
 .table-timeslots
   margin-top 37px
+  width 100%
   thead td
     height 38px
+
+.bookings-container
+  td
+    position relative
+    // height 30000px
+
+.bookings-container__booking
+  position absolute
+  width 95%
+  background-color rgba(0, 255, 255, 0.2)
 
 
 //==============================================================================
@@ -59,8 +70,12 @@ for row in (1..15)
   height: calc(100% - 4px)
   cursor: pointer
 
+$resizer
+  background-color rgba(0, 255, 255, 0.7)
+  position absolute
+
 .n-resize
-  position: absolute
+  @extends $resizer
   top: -3px
   left: 0px
   width: 100%
@@ -68,7 +83,7 @@ for row in (1..15)
   cursor: n-resize
 
 .e-resize
-  position: absolute
+  @extends $resizer
   top: 0px
   left: calc(100% - 2px)
   width: 5px
@@ -76,7 +91,7 @@ for row in (1..15)
   cursor: w-resize
 
 .s-resize
-  position: absolute
+  @extends $resizer
   top: calc(100% - 2px)
   left: 0px
   width: 100%
@@ -84,7 +99,7 @@ for row in (1..15)
   cursor: s-resize
 
 .w-resize
-  position: absolute
+  @extends $resizer
   top: 0px
   left: -3px
   width: 5px
@@ -92,7 +107,7 @@ for row in (1..15)
   cursor: e-resize
 
 .nw-resize
-  position: absolute
+  @extends $resizer
   top: -3px
   left: -3px
   width: 7px
@@ -100,7 +115,7 @@ for row in (1..15)
   cursor: nw-resize
 
 .ne-resize
-  position: absolute
+  @extends $resizer
   top: -3px
   left: calc(100% - 4px)
   width: 7px
@@ -108,7 +123,7 @@ for row in (1..15)
   cursor: ne-resize
 
 .se-resize
-  position: absolute
+  @extends $resizer
   top: calc(100% - 4px)
   left: calc(100% - 4px)
   width: 7px
@@ -116,7 +131,7 @@ for row in (1..15)
   cursor: se-resize
 
 .sw-resize
-  position: absolute
+  @extends $resizer
   top: calc(100% - 4px)
   left: -3px
   width: 7px

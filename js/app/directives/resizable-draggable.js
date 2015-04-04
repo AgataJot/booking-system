@@ -2,24 +2,23 @@
 function placeNode(node, top, left) {
     node.css({
       position: "absolute",
-      top: top + "px",
-      left: left + "px",
+      top: top + "px"
     });
   }
-scheduleAppControllers.directive("ceBoxCreator", function($document, $compile) {
-  return {
-    restrict: 'A',
-    link: function($scope, $element, $attrs) {
-      $element.on("click", function($event) {
+// scheduleAppControllers.directive("ceBoxCreator", function($document, $compile) {
+//   return {
+//     restrict: 'A',
+//     link: function($scope, $element, $attrs) {
+//       $element.on("click", function($event) {
 
-        var newNode = $compile('<div class="contentEditorBox" ce-drag ce-resize></div>')($scope);
-        placeNode(newNode, $event.pageY - 25, $event.pageX - 25);
-        // angular.element($document[0].body).append(newNode);
-        angular.element($document[0].body).append(newNode);
-      });
-    }
-  }
-});
+//         var newNode = $compile('<div class="contentEditorBox" ce-drag ce-resize></div>')($scope);
+//         placeNode(newNode, $event.pageY - 25, $event.pageX - 25);
+//         // angular.element($document[0].body).append(newNode);
+//         angular.element($document[0].body).append(newNode);
+//       });
+//     }
+//   }
+// });
 
 // To manage the drag
 scheduleAppControllers.directive("ceDrag", function($document) {
@@ -34,7 +33,9 @@ scheduleAppControllers.directive("ceDrag", function($document) {
       event.preventDefault();
 
       // To keep the last selected box in front
-      angular.element(document.querySelectorAll(".contentEditorBox")).css("z-index", "0");
+      angular
+        .element(document.querySelectorAll(".contentEditorBox"))
+        .css("z-index", "0");
       $element.css("z-index", "1");
 
       startX = $event.pageX - $element[0].offsetLeft;
@@ -55,7 +56,8 @@ scheduleAppControllers.directive("ceDrag", function($document) {
 });
 
 // To manage the resizers
-scheduleAppControllers.directive("ceResize", function($document) {
+scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function($document, $timeout) {
+
   return function($scope, $element, $attr) {
     //Reference to the original
     var $mouseDown;
@@ -132,20 +134,34 @@ scheduleAppControllers.directive("ceResize", function($document) {
         }
 
         function mouseup() {
+
+          $timeout(function(){
+
+            var multiplies = 37
+            var originalH = $element.prop('offsetHeight')
+            var slots = originalH / multiplies
+            var destHeight = Math.round(slots) * multiplies
+
+            $element.css({
+              height: destHeight + "px"
+            });
+
+          }, 100);
           $document.off("mousemove", mousemove);
           $document.off("mouseup", mouseup);
+
         }
       });
     }
 
-    createResizer( 'sw-resize' , [ resizeDown , resizeLeft ] );
-    createResizer( 'ne-resize' , [ resizeUp   , resizeRight ] );
-    createResizer( 'nw-resize' , [ resizeUp   , resizeLeft ] );
-    createResizer( 'se-resize' , [ resizeDown ,  resizeRight ] );
-    createResizer( 'w-resize' , [ resizeLeft ] );
-    createResizer( 'e-resize' , [ resizeRight ] );
-    createResizer( 'n-resize' , [ resizeUp ] );
+    // createResizer( 'sw-resize' , [ resizeDown , resizeLeft ] );
+    // createResizer( 'ne-resize' , [ resizeUp   , resizeRight ] );
+    // createResizer( 'nw-resize' , [ resizeUp   , resizeLeft ] );
+    // createResizer( 'se-resize' , [ resizeDown ,  resizeRight ] );
+    // createResizer( 'w-resize' , [ resizeLeft ] );
+    // createResizer( 'e-resize' , [ resizeRight ] );
+    // createResizer( 'n-resize' , [ resizeUp ] );
     createResizer( 's-resize' , [ resizeDown ] );
   };
 
-});
+}]);
