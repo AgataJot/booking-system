@@ -61,53 +61,27 @@ scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function(
   return function($scope, $element, $attr) {
     //Reference to the original
     var $mouseDown;
+    var $container = $element.parent('draggable-container')
+    var $containerTop = $container[0].offsetTop
+    console.log("$containerTop", $containerTop);
 
-    // Function to manage resize up event
-    var resizeUp = function($event) {
-      var margin = 50,
-          lowest = $mouseDown.top + $mouseDown.height - margin,
-          top = $event.pageY > lowest ? lowest : $event.pageY,
-          height = $mouseDown.top - top + $mouseDown.height;
-
-      $element.css({
-        top: top + "px",
-        height: height + "px"
-      });
-    };
-
-    // Function to manage resize right event
-    var resizeRight = function($event) {
-      var margin = 50,
-          leftest = $element[0].offsetLeft + margin,
-          width = $event.pageX > leftest ? $event.pageX - $element[0].offsetLeft : margin;
-
-      $element.css({
-        width: width + "px"
-      });
-    };
 
     // Function to manage resize down event
     var resizeDown = function($event) {
+
+
       var margin = 50,
           uppest = $element[0].offsetTop + margin,
-          height = $event.pageY > uppest ? $event.pageY - $element[0].offsetTop : margin;
+          height = $event.pageY - $element[0].getBoundingClientRect().top
+          // ,
+          // TODO manage the upper most border
+          // posT = $element[0].offsetTop,
+          // height = (height > uppest) ? (height) : margin
 
       $element.css({
         height: height + "px"
       });
-    };
 
-    // Function to manage resize left event
-    function resizeLeft ($event) {
-      var margin = 50,
-          rightest = $mouseDown.left + $mouseDown.width - margin,
-          left = $event.pageX > rightest ? rightest : $event.pageX,
-          width = $mouseDown.left - left + $mouseDown.width;
-
-      $element.css({
-        left: left + "px",
-        width: width + "px"
-      });
     };
 
    var createResizer = function createResizer( className , handlers ){
@@ -115,6 +89,7 @@ scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function(
       newElement = angular.element( '<div class="' + className + '"></div>' );
       $element.append(newElement);
       newElement.on("mousedown", function($event) {
+        console.log("$even", $event);
 
         $document.on("mousemove", mousemove);
         $document.on("mouseup", mouseup);
@@ -133,7 +108,7 @@ scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function(
           }
         }
 
-        function mouseup() {
+        function mouseup($even) {
 
           $timeout(function(){
 
@@ -154,13 +129,6 @@ scheduleAppControllers.directive("ceResize", ['$document', '$timeout', function(
       });
     }
 
-    // createResizer( 'sw-resize' , [ resizeDown , resizeLeft ] );
-    // createResizer( 'ne-resize' , [ resizeUp   , resizeRight ] );
-    // createResizer( 'nw-resize' , [ resizeUp   , resizeLeft ] );
-    // createResizer( 'se-resize' , [ resizeDown ,  resizeRight ] );
-    // createResizer( 'w-resize' , [ resizeLeft ] );
-    // createResizer( 'e-resize' , [ resizeRight ] );
-    // createResizer( 'n-resize' , [ resizeUp ] );
     createResizer( 's-resize' , [ resizeDown ] );
   };
 
