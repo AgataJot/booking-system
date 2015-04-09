@@ -5,9 +5,8 @@ scheduleAppControllers.directive('dayPicker', ['dateFilter', function(dateFilter
     restrict: 'E',
     templateUrl: 'templates/day-picker.html',
     controller: function($scope, $element, $attrs) {
+
       this.isOpen = true;
-      console.log("$scope", $scope);
-      console.log("dat", $scope.dat);
 
       this.toggle = function() {
         this.isOpen = !this.isOpen
@@ -29,7 +28,6 @@ scheduleAppControllers.directive('dayPicker', ['dateFilter', function(dateFilter
       this.toggleMin();
 
       this.open = function($event) {
-        console.log("open");
         $event.preventDefault();
         $event.stopPropagation();
 
@@ -43,15 +41,6 @@ scheduleAppControllers.directive('dayPicker', ['dateFilter', function(dateFilter
 
       this.format = 'dd-MMMM-yyyy';
 
-
-      // $scope.$watch('dat', function(newValue, oldValue){
-      //   console.log("newValue, oldValue)", newValue, oldValue);
-      //   if (newValue.valueOf() !== oldValue.valueOf()) {
-      //     var d = dateFilter(newValue, 'yyyy/MM/dd')
-      //     console.log("d", d);
-      //     // $scope.$emit('DAYPICKER:DATE:CHANGE', d)
-      //   }
-      // }, true);
     },
     controllerAs: "daypicker",
     scope: {

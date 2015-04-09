@@ -1,5 +1,18 @@
 // create our main controller and get access to firebase
-scheduleAppControllers.controller('OverviewController', ['$scope', '$location', '$firebaseArray', '$firebaseObject', '$routeParams', 'dateFilter',
+ // var underscore = angular.module('underscore', []);
+scheduleAppControllers.factory('_', function() {
+  debugger
+  return window._; // assumes underscore has already been loaded on the page
+});
+
+scheduleAppControllers.controller('OverviewController', 
+  ['$scope',
+  '$location',
+  '$firebaseArray',
+  '$firebaseObject',
+  '$routeParams',
+  'dateFilter',
+  '_',
   function($scope, $location, $firebaseArray, $firebaseObject, $routeParams, dateFilter) {
 
     var tables = [],
@@ -16,7 +29,6 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     $scope.hours = null;
     $scope.bookingsArr = null;
     $scope.detailedBookingsArr = null;
-    $scope.day2 = {};
 
 
     (function init() {
@@ -26,7 +38,7 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
       root = new Firebase("https://boiling-heat-3704.firebaseio.com/");
       fbtables= new Firebase(root + "tables/")
-      fbday= new Firebase(root + "days/" + firebaseFormattedDate)
+      fbday = new Firebase(root + "days/" + firebaseFormattedDate)
       // refDetailedBookingsInfo = new Firebase(root+"/bookings");
 
       // scope fields
@@ -39,12 +51,15 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
         for(; h<22; h++) {
           var m = 0
           for(; m<60; m += 15) {
-            var datetime = new Date($scope.dt)
-            datetime.setHours(h)
-            datetime.setMinutes(m)
+            var date = new Date($scope.dt)
+            date.setHours(h)
+            date.setMinutes(m)
+            date.setSeconds(0)
+            date.setMilliseconds(0)
+            console.log("date", date);
             hours.push({
-              datetime: datetime,
-              string: dateFilter(datetime, 'H:mm')
+              date: date,
+              string: dateFilter(date, 'H:mm')
             })
           }
         }
@@ -61,24 +76,6 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
     (function watchfFirebaseEvents() {
       fbday.on("child_added", function(snapshot) {
 
-        var tableId = snapshot.key()
-        var addedObject = snapshot.val()
-        var firstHour = Object.keys(addedObject)[0]
-        var endTime = addedObject[firstHour].endDateTime
-        var foundFirst = false
-
-        $scope.hours.forEach(function(hourobj, i) {
-          if (hourobj.string===firstHour) {
-            foundFirst = true
-          }
-
-          if (foundFirst && endTime >= hourobj.datetime.valueOf()) {
-            $scope.day2[tableId] =  $scope.day2[tableId] || {}
-            $scope.day2[tableId][hourobj.string] = addedObject[firstHour]
-          }
-
-          return
-        })
       }, function (errorobject) {
         // console.log("the read failed: " + errorobject.code);
       });
@@ -96,21 +93,34 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
 
     })();
 
-    (function bindEvents() {
+    (function bindUIEvents() {
 
-      $scope.onTDClicked = function ($event, i, tableId, datetime) {
+      $scope.onTDClicked = function addBookingFromUI($event, i, tableId, datetime) {
         var endDateTime = new Date(datetime)
         endDateTime.setHours(endDateTime.getHours() + 2)
-        var time = dateFilter(new Date(datetime), 'H:mm')
+        var startTime = dateFilter(new Date(datetime), 'H:mm')
 
         addBooking({
           tableId: tableId,
-          time: time,
+          time: startTime,
           date: firebaseFormattedDate,
           endDateTime: endDateTime.valueOf(),
           startTimeSlotIndex: i
         })
       }
+
+      $scope.$on('bookingChangedFromUI', function changeBookingFromUI(e, startTimeSlot, durationSlots, tableId, bookingId, timestring){
+
+        var endDateTime_ts = $scope.hours[startTimeSlot].date.valueOf()
+        endDateTime_ts += 15 * 60000 * durationSlots // 15min * 1min * timeslots
+
+        changeBooking(timestring, bookingId, tableId, {
+          tableId: tableId,
+          time: $scope.hours[startTimeSlot].string,
+          endDateTime: endDateTime_ts,
+          startTimeSlotIndex: startTimeSlot
+        })
+      });
 
     })();
 
@@ -143,16 +153,6 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
   // }
   function addBooking(newBooking) {
 
-
-
-    // // todo check if doesn't already exist or is clashing
-    // fbbookingsontheday.child("/bookings").on("value", function(snapshot) {
-    //   tables = snapshot.val();
-    // }, function (errorobject) {
-      // // console.log("the read failed: " + errorobject.code);
-    // });
-
-
     var id = root.child("/bookings").push();
     id.set(newBooking, function(err) {
       if (!err) {
@@ -170,36 +170,54 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
         //     endDateTime: newBooking.endDateTime
         // }
         $scope.day.$save()
-
-
-
-        // add the rest of the booking
-
-        // var timeref = "/days/" + firebaseFormattedDate + "/" +newBooking.time+ "/"
-
-        // root.child( timeref ).set(
-        //   {
-        //     bookingid: bookingid,
-        //     tableId: newBooking.tableId,
-        //     endDateTime: newBooking.endDateTime
-        //   }
-        // );
-        // root.child("/users/" + comment.author + "/bookings/" + name).set(true);
       }
     });
   }
+
+  function changeBooking(currentKeyTime, bookingId, tableId, newBooking) {
+    var f = $scope.day[newBooking.tableId]
+    console.log("f", f);
+    debugger
+    // var fbday_booking = new Firebase(root + "days/" + firebaseFormattedDate + '/' + currentKeyTime)
+
+    var bookingChanging = _.findWhere($scope.day[newBooking.tableId], {bookingId: bookingId})
+    // fbday_booking.remove()
+
+    f[currentKeyTime] = null // TODO just set an inactive flag first before transactino completes
+    f[newBooking.time] = {
+      bookingId: bookingId,
+      endDateTime: newBooking.endDateTime,
+      startTimeSlotIndex: newBooking.startTimeSlotIndex
+    }
+
+    $scope.day.$save().then(function(ref) {
+
+      var b = root.child("/bookings/" + bookingId)
+
+      b.update({
+        endDateTime: newBooking.endDateTime,
+        startTimeSlotIndex: newBooking.startTimeSlotIndex,
+        time: newBooking.time
+      }, function(e) {
+        console.log("success e", e);
+      })
+
+    }, function(error) {
+      console.log("Error:", error);
+    });
+
+  }
+
 
   // ****************************
   // ******* render bookings ****
   // ****************************
 
-  // day2[hour.string][table.$id]
   $scope.day.$watch(function(e){
     // console.log(e);
     if(e.event === 'value') {
       // // console.log("e.val", e);
       // // console.log("$scope.day", $scope.day);
-      // $scope.day2
       // var fbbookingobj = new Firebase(root + "/bookings/" + e.key)
       // $scope.bookingsArr.push(newobj)
       // fbbookingobj.$bindto($scope, "days")
@@ -208,27 +226,4 @@ scheduleAppControllers.controller('OverviewController', ['$scope', '$location', 
       // // console.log("$scope.bookingsArr", $scope.bookingsArr);
     }
   });
-
-  window.day2 = $scope.day2
-  window.calculatefooheight = function() {
-    var t = '09:45'
-    var t2 = '1429173900000'
-    var tid = '-jlzyp_4hwdhmrqtx0p9'
-    var booking = this.day2[t][tid]
-    var bookingLasting = 9
-    var h = $('table td.tid-' + tid).outerHeight()*bookingLasting
-    var w = $('table td.tid-' + tid).outerWidth()
-    $('#foo').height(h)
-    $('#foo').width(w)
-
-    // pos
-    var off = $('tr.h-'+t2).find('td.tid-' + tid).position()
-    $('#foo').css({
-      top: off.top + 'px',
-      left: off.left + 'px',
-    })
-  }
-
-
-
 }]);

@@ -29,15 +29,15 @@
             <div class="bookings-container__bg">
               <div class="bookings-container__bg__timeslot"
               ng-repeat="(ind, hour) in hours"
-              ng-click="onTDClicked($event, ind, table.$id, hour.datetime)"></div>
+              ng-click="onTDClicked($event, ind, table.$id, hour.date)"></div>
             </div>
 
             <div 
              ng-repeat="(key, value) in day[table.$id]"
-             ng-class="{{['h-' + value.startTimeSlotIndex, 'bookings-container__booking']}}"
+             ng-class="{{['h-' + value.startTimeSlotIndex, 'bookings-container__booking']}}" table-id="{{table.$id}}" booking-id="{{value.bookingId}}" timestring="{{key}}"
              ce-drag ce-resize
-             >
-              {{table.$id}}} -- {{key}}
+             >key: {{key}}, table id: 
+              {{table.$id}}}, bookind id: {{value.bookingId}}
             </div>
           </td>
         </tr>
