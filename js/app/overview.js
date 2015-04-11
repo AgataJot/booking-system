@@ -80,6 +80,27 @@ scheduleAppControllers.controller('OverviewController',
         // console.log("the read failed: " + errorobject.code);
       });
 
+      //observe loading day bookings data
+      // $scope.day.$loaded()
+      // .then(function ondaybookingsloaded(data){
+      // })
+      // .catch(function(err){
+      // });
+
+      $scope.day.$watch(function(e){
+        // console.log(e);
+        if(e.event === 'value') {
+          // // console.log("e.val", e);
+          // // console.log("$scope.day", $scope.day);
+          // var fbbookingobj = new Firebase(root + "/bookings/" + e.key)
+          // $scope.bookingsArr.push(newobj)
+          // fbbookingobj.$bindto($scope, "days")
+
+          // $firebaseObject(fbbookingsontheday)
+          // // console.log("$scope.bookingsArr", $scope.bookingsArr);
+        }
+      });
+
     })();
 
     (function watchScopeVariables() {
@@ -105,7 +126,8 @@ scheduleAppControllers.controller('OverviewController',
           time: startTime,
           date: firebaseFormattedDate,
           endDateTime: endDateTime.valueOf(),
-          startTimeSlotIndex: i
+          startTimeSlotIndex: i,
+          durationSlots: 8
         })
       }
 
@@ -118,32 +140,16 @@ scheduleAppControllers.controller('OverviewController',
           tableId: tableId,
           time: $scope.hours[startTimeSlot].string,
           endDateTime: endDateTime_ts,
-          startTimeSlotIndex: startTimeSlot
+          startTimeSlotIndex: startTimeSlot,
+          durationSlots: durationSlots
         })
       });
 
     })();
 
-
-  //observe loading day bookings data
-  // $scope.day.$loaded()
-  // .then(function ondaybookingsloaded(data){
-  //   if (!$scope.day.length) {
-  //   }
-  // })
-  // .catch(function(err){
-  // });
-
-
   // ****************************
   // ******* add new booking ****
   // ****************************
-
-  // var fbbookingsontheday= new Firebase(root + "days/" + firebaseFormattedDate)
-  // $scope.fbbookingsontheday = $firebaseArray(fbbookingsontheday);
-  // // console.log("$scope.fbbookingsontheday", $scope.fbbookingsontheday);
-
-
 
   // {
   //   tableId: tableId,
@@ -162,13 +168,9 @@ scheduleAppControllers.controller('OverviewController',
         $scope.day[newBooking.tableId][newBooking.time] = {
             bookingId: bookingId,
             endDateTime: newBooking.endDateTime,
-            startTimeSlotIndex: newBooking.startTimeSlotIndex
+            startTimeSlotIndex: newBooking.startTimeSlotIndex,
+            durationSlots: newBooking.durationSlots
         }
-        // $scope.day[newBooking.time] = $scope.day[newBooking.time] || {}
-        // $scope.day[newBooking.time][t] = {
-        //     bookingId: bookingId,
-        //     endDateTime: newBooking.endDateTime
-        // }
         $scope.day.$save()
       }
     });
@@ -183,11 +185,19 @@ scheduleAppControllers.controller('OverviewController',
     var bookingChanging = _.findWhere($scope.day[newBooking.tableId], {bookingId: bookingId})
     // fbday_booking.remove()
 
+    // check if is the same
+    if ( bookingChanging.startTimeSlotIndex === newBooking.startTimeSlotIndex
+      && bookingChanging.endDateTime === newBooking.endDateTime
+      && tableId === tableId) {
+      return;
+    }
+
     f[currentKeyTime] = null // TODO just set an inactive flag first before transactino completes
     f[newBooking.time] = {
       bookingId: bookingId,
       endDateTime: newBooking.endDateTime,
-      startTimeSlotIndex: newBooking.startTimeSlotIndex
+      startTimeSlotIndex: newBooking.startTimeSlotIndex,
+      durationSlots: newBooking.durationSlots
     }
 
     $scope.day.$save().then(function(ref) {
@@ -208,22 +218,4 @@ scheduleAppControllers.controller('OverviewController',
 
   }
 
-
-  // ****************************
-  // ******* render bookings ****
-  // ****************************
-
-  $scope.day.$watch(function(e){
-    // console.log(e);
-    if(e.event === 'value') {
-      // // console.log("e.val", e);
-      // // console.log("$scope.day", $scope.day);
-      // var fbbookingobj = new Firebase(root + "/bookings/" + e.key)
-      // $scope.bookingsArr.push(newobj)
-      // fbbookingobj.$bindto($scope, "days")
-
-      // $firebaseObject(fbbookingsontheday)
-      // // console.log("$scope.bookingsArr", $scope.bookingsArr);
-    }
-  });
 }]);

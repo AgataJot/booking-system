@@ -34,8 +34,14 @@
 
             <div 
              ng-repeat="(key, value) in day[table.$id]"
-             ng-class="{{['h-' + value.startTimeSlotIndex, 'bookings-container__booking']}}" table-id="{{table.$id}}" booking-id="{{value.bookingId}}" timestring="{{key}}"
-             ce-drag ce-resize
+             ng-class="{{['h-' + value.startTimeSlotIndex, 'duration-' + value.durationSlots, 'bookings-container__booking']}}" table-id="{{table.$id}}" booking-id="{{value.bookingId}}" timestring="{{key}}"
+             
+             booking-popover
+             cont="Foobar"
+             tooltip-animation="false" 
+             tooltip-trigger="click"
+             tooltip-append-to-body="true"
+             tooltip-html-unsafe="{{cont}}" 
              >key: {{key}}, table id: 
               {{table.$id}}}, bookind id: {{value.bookingId}}
             </div>
